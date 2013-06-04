@@ -15,15 +15,19 @@ NAME_NORMAL = 0
 NAME_ANY    = 1
 
 class Name(object):
-	def __init__(self, components=[], name_type=NAME_NORMAL, ndn_data=None):
+	def __init__(self, components=[], name_type=NAME_NORMAL, ndn_data=None, ndnb_buffer=None):
 		self._setattr('type', name_type)
 
 		# pyndn
 		#self._setattr('ndn_data_dirty', True)
 		self._setattr('ndn_data', ndn_data)
 
+                # Name from simple buffer containing name in ndnb encoding
+                if ndnb_buffer:
+                        self._setattr('components', _pyndn.name_comps_from_ndn_buffer (bytes (ndnb_buffer)))
+
 		# Name from NDN
-		if ndn_data:
+		elif ndn_data:
 			self._setattr('components', _pyndn.name_comps_from_ndn(ndn_data))
 			self._setattr('ndn_data_dirty', False)
 

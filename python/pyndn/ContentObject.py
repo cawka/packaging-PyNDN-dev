@@ -101,6 +101,13 @@ class ContentObject(object):
 
 		return "pyndn.ContentObject(%s)" % ", ".join(args)
 
+	def get_ndnb(self):
+		return _pyndn.dump_charbuf(self.ndn_data)
+
+        @staticmethod
+        def from_ndnb (ndnb):
+                return _pyndn.ContentObject_obj_from_ndn_buffer (ndnb)
+
 class Signature(object):
 	def __init__(self):
 		self.digestAlgorithm = None

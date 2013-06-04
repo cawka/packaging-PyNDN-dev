@@ -107,6 +107,7 @@ static PyMethodDef g_module_methods[] = {
 
 	// Converters
 	{"name_comps_to_ndn", _pyndn_cmd_name_comps_to_ndn, METH_O, NULL},
+	{"name_comps_from_ndn_buffer", _pyndn_cmd_name_comps_from_ndn_buffer, METH_O, NULL},
 	{"name_comps_from_ndn", _pyndn_cmd_name_comps_from_ndn, METH_O, NULL},
 	{"Interest_obj_to_ndn", _pyndn_cmd_Interest_obj_to_ndn, METH_O, NULL},
 	{"Interest_obj_from_ndn", _pyndn_cmd_Interest_obj_from_ndn, METH_O, NULL},
@@ -114,6 +115,7 @@ static PyMethodDef g_module_methods[] = {
 		NULL},
 	{"ContentObject_obj_from_ndn", _pyndn_cmd_ContentObject_obj_from_ndn,
 		METH_O, NULL},
+	{"ContentObject_obj_from_ndn_buffer", _pyndn_cmd_ContentObject_obj_from_ndn_buffer, METH_O, NULL},
 	{"digest_contentobject", _pyndn_cmd_digest_contentobject, METH_VARARGS,
 		NULL},
 	{"content_matches_interest", _pyndn_cmd_content_matches_interest,

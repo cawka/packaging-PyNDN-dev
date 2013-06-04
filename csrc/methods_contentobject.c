@@ -226,6 +226,43 @@ _pyndn_content_object_set_comps(PyObject *py_content_object,
 // Content Objects
 
 PyObject *
+ContentObject_obj_from_ndn_buffer (PyObject *py_buffer)
+{
+  int r;
+  Py_buffer buffer;
+  PyObject *py_o;
+  PyObject *py_data = NULL;
+  struct ndn_charbuf *data;
+
+  if (!PyObject_CheckBuffer (py_buffer))
+    {
+      PyErr_SetString(PyExc_TypeError, "The argument is not a buffer");
+      return NULL;
+    }
+
+  r = PyObject_GetBuffer (py_buffer, &buffer, PyBUF_SIMPLE);
+  if (r < 0)
+    {
+      PyErr_SetString(PyExc_TypeError, "The argument is not a buffer");
+      return NULL;
+    }
+
+  py_data = NDNObject_New_charbuf (CONTENT_OBJECT, &data);
+  JUMP_IF_NULL(py_data, error);
+  r = ndn_charbuf_append (data, buffer.buf, buffer.len);
+  JUMP_IF_NEG_MEM(r, error);
+
+  py_o = ContentObject_obj_from_ndn (py_data);
+  Py_CLEAR(py_data);
+  JUMP_IF_NULL(py_o, error);
+
+  return py_o;
+  
+error:
+  return NULL;
+}
+
+PyObject *
 ContentObject_obj_from_ndn(PyObject *py_content_object)
 {
 	struct ndn_charbuf *content_object;
@@ -491,6 +528,12 @@ PyObject *
 _pyndn_cmd_ContentObject_obj_from_ndn(PyObject *UNUSED(self), PyObject *py_co)
 {
 	return ContentObject_obj_from_ndn(py_co);
+}
+
+PyObject *
+_pyndn_cmd_ContentObject_obj_from_ndn_buffer(PyObject *UNUSED(self), PyObject *py_buffer)
+{
+	return ContentObject_obj_from_ndn_buffer(py_buffer);
 }
 
 PyObject *

@@ -13,6 +13,7 @@
 
 PyObject *_pyndn_cmd_name_comps_to_ndn(PyObject *self, PyObject *py_name_components);
 PyObject *_pyndn_cmd_name_comps_from_ndn(PyObject *self, PyObject *py_cname);
+PyObject *_pyndn_cmd_name_comps_from_ndn_buffer (PyObject *self, PyObject *py_buffer);
 PyObject *Name_obj_from_ndn(PyObject *ndn_data);
 PyObject *Name_obj_to_ndn(PyObject *py_name);
 PyObject *Name_from_ndn_tagged_bytearray(const unsigned char *buf,
