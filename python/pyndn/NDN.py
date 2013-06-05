@@ -18,7 +18,13 @@ class NDN(object):
 	def __init__(self):
 		self._handle_lock = threading.Lock()
 		self.ndn_data = _pyndn.create()
+		self.connect ()
+
+	def connect (self):
 		_pyndn.connect(self.ndn_data)
+
+	def disconnect (self):
+		_pyndn.disconnect(self.ndn_data)
 
 	def _acquire_lock(self, tag):
 		if not _pyndn.is_run_executing(self.ndn_data):
@@ -147,3 +153,5 @@ class EventLoop(object):
 
 	def stop(self):
 		self.running = False
+		for fd, handle in zip(self.fds.keys(), self.fds.values()):
+			handle.disconnect ()
