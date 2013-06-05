@@ -50,8 +50,10 @@ UpcallInfo_obj_from_ndn(enum ndn_upcall_kind upcall_kind,
 	JUMP_IF_NULL(py_o, error);
 
 	if (upcall_kind == NDN_UPCALL_CONTENT ||
-			upcall_kind == NDN_UPCALL_CONTENT_UNVERIFIED ||
-			upcall_kind == NDN_UPCALL_CONTENT_BAD) {
+            upcall_kind == NDN_UPCALL_CONTENT_UNVERIFIED ||
+            upcall_kind == NDN_UPCALL_CONTENT_BAD ||
+            upcall_kind == NDN_UPCALL_CONTENT_KEYMISSING ||
+            upcall_kind == NDN_UPCALL_CONTENT_RAW) {
 
 		py_data = NDNObject_New_charbuf(CONTENT_OBJECT, &data);
 		JUMP_IF_NULL(py_data, error);
@@ -69,11 +71,13 @@ UpcallInfo_obj_from_ndn(enum ndn_upcall_kind upcall_kind,
 	}
 
 	if (upcall_kind == NDN_UPCALL_INTEREST ||
-			upcall_kind == NDN_UPCALL_CONSUMED_INTEREST ||
-			upcall_kind == NDN_UPCALL_CONTENT ||
-			upcall_kind == NDN_UPCALL_INTEREST_TIMED_OUT ||
-			upcall_kind == NDN_UPCALL_CONTENT_UNVERIFIED ||
-			upcall_kind == NDN_UPCALL_CONTENT_BAD) {
+            upcall_kind == NDN_UPCALL_CONSUMED_INTEREST ||
+            upcall_kind == NDN_UPCALL_CONTENT ||
+            upcall_kind == NDN_UPCALL_INTEREST_TIMED_OUT ||
+            upcall_kind == NDN_UPCALL_CONTENT_UNVERIFIED ||
+            upcall_kind == NDN_UPCALL_CONTENT_BAD ||
+            upcall_kind == NDN_UPCALL_CONTENT_KEYMISSING ||
+            upcall_kind == NDN_UPCALL_CONTENT_RAW) {
 		py_data = NDNObject_New_charbuf(INTEREST, &data);
 		JUMP_IF_NULL(py_data, error);
 		r = ndn_charbuf_append(data, ui->interest_ndnb,
@@ -254,6 +258,31 @@ _pyndn_cmd_disconnect(PyObject *UNUSED(self), PyObject *py_ndn_handle)
 				" with NDN daemon: %s [%d]", strerror(err), err);
 	}
 
+	Py_RETURN_NONE;
+}
+
+PyObject *
+_pyndn_cmd_defer_verification (PyObject *UNUSED(self), PyObject *args)
+{
+	struct ndn *handle;
+        int deferral = 1;
+        PyObject *py_handle;
+	int r;
+
+	if (!PyArg_ParseTuple(args, "O|i", &py_handle, &deferral))
+		return NULL;
+
+	if (!NDNObject_IsValid(HANDLE, py_handle)) {
+		PyErr_SetString(PyExc_TypeError, "Must pass a NDN Handle");
+		return NULL;
+	}
+	handle = NDNObject_Get(HANDLE, py_handle);
+
+        r = ndn_defer_verification(handle, deferral);
+	if (r < 0) {
+		int err = ndn_geterror(handle);
+		return PyErr_Format(g_PyExc_NDNError, "Unable to defer verification: %s [%d]", strerror(err), err);
+	}
 	Py_RETURN_NONE;
 }
 
@@ -519,6 +548,42 @@ _pyndn_cmd_set_interest_filter(PyObject *UNUSED(self), PyObject *args)
 
 		Py_DECREF(py_o);
 		PyErr_Format(PyExc_IOError, "Unable to set and interest filter: %s [%d]",
+				strerror(err), err);
+		return NULL;
+	}
+
+	return Py_BuildValue("i", r);
+}
+
+PyObject *
+_pyndn_cmd_clear_interest_filter(PyObject *UNUSED(self), PyObject *args)
+{
+	PyObject *py_ndn, *py_name;
+	struct ndn *handle;
+	struct ndn_charbuf *name;
+	int r;
+
+	if (!PyArg_ParseTuple(args, "OO|i", &py_ndn, &py_name))
+		return NULL;
+
+	if (!NDNObject_IsValid(HANDLE, py_ndn)) {
+		PyErr_SetString(PyExc_TypeError, "Must pass a NDN handle as arg 1");
+		return NULL;
+	}
+
+	if (!NDNObject_IsValid(NAME, py_name)) {
+		PyErr_SetString(PyExc_TypeError, "Must pass a NDN Name as arg 1");
+		return NULL;
+	}
+
+	handle = NDNObject_Get(HANDLE, py_ndn);
+	name = NDNObject_Get(NAME, py_name);
+
+	r = ndn_set_interest_filter(handle, name, 0);
+	if (r < 0) {
+		int err = ndn_geterror(handle);
+
+		PyErr_Format(PyExc_IOError, "Unable to clear interest filter: %s [%d]",
 				strerror(err), err);
 		return NULL;
 	}

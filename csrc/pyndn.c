@@ -60,6 +60,7 @@ static PyMethodDef g_module_methods[] = {
 	{"create", _pyndn_cmd_create, METH_NOARGS, NULL},
 	{"connect", _pyndn_cmd_connect, METH_O, NULL},
 	{"disconnect", _pyndn_cmd_disconnect, METH_O, NULL},
+	{"defer_verification", _pyndn_cmd_defer_verification, METH_VARARGS, NULL},
 	{"get_connection_fd", _pyndn_get_connection_fd, METH_O, NULL},
 	{"process_scheduled_operations", _pyndn_cmd_process_scheduled_operations,
 		METH_O, NULL},
@@ -69,6 +70,7 @@ static PyMethodDef g_module_methods[] = {
 	{"is_run_executing", _pyndn_cmd_is_run_executing, METH_O, NULL},
 	{"express_interest", _pyndn_cmd_express_interest, METH_VARARGS, NULL},
 	{"set_interest_filter", _pyndn_cmd_set_interest_filter, METH_VARARGS, NULL},
+	{"clear_interest_filter", _pyndn_cmd_clear_interest_filter, METH_VARARGS, NULL},
 	{"get", _pyndn_cmd_get, METH_VARARGS, NULL},
 	{"put", _pyndn_cmd_put, METH_VARARGS, NULL},
 	{"get_default_key", _pyndn_cmd_get_default_key, METH_NOARGS, NULL},
@@ -107,7 +109,7 @@ static PyMethodDef g_module_methods[] = {
 
 	// Converters
 	{"name_comps_to_ndn", _pyndn_cmd_name_comps_to_ndn, METH_O, NULL},
-	{"name_comps_from_ndn_buffer", _pyndn_cmd_name_comps_from_ndn_buffer, METH_O, NULL},
+        {"name_comps_from_ndn_buffer", _pyndn_cmd_name_comps_from_ndn_buffer, METH_O, NULL},
 	{"name_comps_from_ndn", _pyndn_cmd_name_comps_from_ndn, METH_O, NULL},
 	{"Interest_obj_to_ndn", _pyndn_cmd_Interest_obj_to_ndn, METH_O, NULL},
 	{"Interest_obj_from_ndn", _pyndn_cmd_Interest_obj_from_ndn, METH_O, NULL},
@@ -115,7 +117,7 @@ static PyMethodDef g_module_methods[] = {
 		NULL},
 	{"ContentObject_obj_from_ndn", _pyndn_cmd_ContentObject_obj_from_ndn,
 		METH_O, NULL},
-	{"ContentObject_obj_from_ndn_buffer", _pyndn_cmd_ContentObject_obj_from_ndn_buffer, METH_O, NULL},
+        {"ContentObject_obj_from_ndn_buffer", _pyndn_cmd_ContentObject_obj_from_ndn_buffer, METH_O, NULL},
 	{"digest_contentobject", _pyndn_cmd_digest_contentobject, METH_VARARGS,
 		NULL},
 	{"content_matches_interest", _pyndn_cmd_content_matches_interest,
