@@ -495,7 +495,7 @@ _pyndn_cmd_encode_ContentObject(PyObject *UNUSED(self), PyObject *args)
 
 	// Key
 	private_key = Key_to_ndn_private(py_key);
-
+        
 	// Note that we don't load this key into the keystore hashtable in the library
 	// because it makes this method require access to a ndn handle, and in fact,
 	// ndn_sign_content just uses what's in signedinfo (after an error check by

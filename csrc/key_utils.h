@@ -35,9 +35,9 @@ struct keypair {
 };
 
 void initialize_crypto(void);
-int create_public_key_digest(RSA *private_key_rsa,
+int create_public_key_digest(struct ndn_pkey*,
 		PyObject **py_public_key_digest, int *public_key_digest_len);
-int ndn_keypair_from_rsa(int public_only, RSA *private_key_rsa,
+int ndn_keypair(int public_only, struct ndn_pkey*,
 		PyObject **py_private_key_ndn,
 		PyObject **py_public_key_ndn);
 PyObject *_pyndn_privatekey_dup(const struct ndn_pkey *key);
