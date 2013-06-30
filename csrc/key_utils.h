@@ -47,19 +47,21 @@ int generate_key(int length, PyObject **private_key_ndn,
 //int generate_keypair(int length, struct keypair** KP);
 
 // We use "PEM" to make things "readable" for now
-int write_key_pem_private(FILE *fp, struct ndn_pkey* private_key_ndn);
+int write_key_pem_private(FILE *fp, struct ndn_pkey* private_key_ndn, char *password);
 int write_key_pem_public(FILE *fp, struct ndn_pkey* private_key_ndn);
 
-PyObject *get_key_pem_private(const struct ndn_pkey *private_key_ndn);
+PyObject *get_key_pem_private(const struct ndn_pkey *private_key_ndn, char *password);
 PyObject *get_key_pem_public(const struct ndn_pkey *key_ndn);
 PyObject *get_key_der_private(struct ndn_pkey *private_key_ndn);
 PyObject *get_key_der_public(struct ndn_pkey *public_key_ndn);
 int read_key_pem(FILE *fp, PyObject **py_private_key_ndn,
-		PyObject **public_key_ndn, PyObject **py_public_key_digest,
-		int *public_key_digest_len);
+                 PyObject **public_key_ndn, PyObject **py_public_key_digest,
+                 int *public_key_digest_len,
+                 char *password);
 int put_key_pem(int is_public_only, PyObject *py_key_pem,
 		PyObject **py_private_key_ndn, PyObject **py_public_key_ndn,
-		PyObject **py_public_key_digest);
+		PyObject **py_public_key_digest,
+                char *password);
 int put_key_der(int is_public_only, PyObject *py_key_der,
 		PyObject **py_private_key_ndn, PyObject **py_public_key_ndn,
 		PyObject **py_public_key_digest, int *public_key_digest_len);
