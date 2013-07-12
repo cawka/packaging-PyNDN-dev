@@ -18,6 +18,7 @@
 #include "methods_handle.h"
 #include "methods_interest.h"
 #include "methods_key.h"
+#include "methods_name.h"
 #include "objects.h"
 
 static PyObject *
@@ -766,4 +767,34 @@ error:
 	ndn_keystore_destroy(&keystore);
 	ndn_charbuf_destroy(&buf);
 	return NULL;
+}
+
+PyObject *
+_pyndn_cmd_get_default_key_name(PyObject *UNUSED(self), PyObject *UNUSED(arg))
+{
+  PyObject *py_name, *py_cname;
+  struct ndn_charbuf *defaultKeyName;
+  int r;
+  struct ndn_signing_params sp = NDN_SIGNING_PARAMS_INIT;
+  struct ndn *handle = ndn_create ();
+
+  handle = ndn_create ();
+
+  defaultKeyName = ndn_charbuf_create ();
+  if (!defaultKeyName)
+    return PyErr_NoMemory ();
+
+  py_cname = NDNObject_New (NAME, defaultKeyName);
+  if (!py_cname) {
+    ndn_charbuf_destroy (&defaultKeyName);
+    return NULL;
+  }
+  
+  r = ndn_get_public_key_and_name (handle, &sp, NULL, NULL, defaultKeyName);
+
+  py_name = r < 0 ? PyErr_NoMemory() : Name_obj_from_ndn (py_cname);
+  Py_DECREF(py_cname);
+
+  ndn_destroy (&handle);
+  return py_name;
 }
