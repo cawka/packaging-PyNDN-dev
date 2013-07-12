@@ -35,3 +35,6 @@ csrc/.DS_Store
 
 # Emacs temp files
 *~
+
+.waf*
+.lock*
