@@ -35,7 +35,6 @@ static struct type_to_name {
 	{PKEY_PUB, "PKEY_PUB_ndn_data"},
 	{SIGNATURE, "Signature_ndn_data"},
 	{SIGNED_INFO, "SignedInfo_ndn_data"},
-	{SIGNING_PARAMS, "SigningParams_ndn_data"},
 #ifdef NAMECRYPTO
 	{NAMECRYPTO_STATE, "Namecrypto_state"},
 #endif

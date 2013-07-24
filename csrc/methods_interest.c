@@ -751,9 +751,6 @@ Interest_obj_from_ndn(PyObject *py_interest)
 		JUMP_IF_NEG(r, error);
 	}
 
-	r = PyObject_SetAttrString(py_obj_Interest, "ndn_data_dirty", Py_False);
-	JUMP_IF_NEG(r, error);
-
 	// 4) Return the created object
 	debug("Interest_from_ndn ends\n");
 

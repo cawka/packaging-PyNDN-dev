@@ -182,7 +182,7 @@ PyObject *
 _pyndn_cmd_name_comps_from_ndn(PyObject *UNUSED(self), PyObject *py_cname)
 {
 	if (!NDNObject_IsValid(NAME, py_cname)) {
-		PyErr_SetString(PyExc_TypeError, "Must pass a NDN name");
+		PyErr_SetString(PyExc_TypeError, "Must pass an NDN name");
 		return NULL;
 	}
 
@@ -246,26 +246,24 @@ _pyndn_cmd_name_comps_from_ndn_buffer (PyObject *UNUSED(self), PyObject *py_buff
 PyObject *
 Name_obj_from_ndn(PyObject *py_cname)
 {
-	PyObject *py_Name = NULL, *py_kargs;
+	PyObject *py_Name = NULL, *py_name_comps;
 	int r;
 
 	assert(g_type_Name);
 	assert(NDNObject_IsValid(NAME, py_cname));
 
-	py_kargs = PyDict_New();
-	JUMP_IF_NULL(py_kargs, error);
-
-	r = PyDict_SetItemString(py_kargs, "ndn_data", py_cname);
-	JUMP_IF_NEG(r, error);
-
-	py_Name = PyEval_CallObjectWithKeywords(g_type_Name, NULL, py_kargs);
+	py_Name = PyEval_CallObject(g_type_Name, NULL);
 	JUMP_IF_NULL(py_Name, error);
-	Py_CLEAR(py_kargs);
+
+	py_name_comps = name_comps_from_ndn (py_cname);
+	JUMP_IF_NULL(py_name_comps, error);
+
+	r = PyObject_SetAttrString(py_Name, "components", py_name_comps);
+	JUMP_IF_NEG(r, error);
 
 	return py_Name;
 
 error:
-	Py_XDECREF(py_kargs);
 	return NULL;
 }
 

@@ -356,9 +356,6 @@ ContentObject_obj_from_ndn(PyObject *py_content_object)
 	r = PyObject_SetAttrString(py_obj_ContentObject, "ndn_data", py_content_object);
 	JUMP_IF_NEG(r, error);
 
-	r = PyObject_SetAttrString(py_obj_ContentObject, "ndn_data_dirty", Py_False);
-	JUMP_IF_NEG(r, error);
-
 	debug("ContentObject_from_ndn_parsed complete\n");
 
 	return py_obj_ContentObject;

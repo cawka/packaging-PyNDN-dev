@@ -214,18 +214,6 @@ error:
 }
 
 PyObject *
-_pyndn_SigningParams_from_ndn(PyObject *UNUSED(self),
-		PyObject *py_signing_params)
-{
-	if (!NDNObject_IsValid(SIGNING_PARAMS, py_signing_params)) {
-		PyErr_SetString(PyExc_TypeError, "Must pass a NDN SigningParams");
-		return NULL;
-	}
-
-	return obj_SigningParams_from_ndn(py_signing_params);
-}
-
-PyObject *
 _pyndn_cmd_dump_charbuf(PyObject *UNUSED(self), PyObject *py_charbuf)
 {
 	const struct ndn_charbuf *charbuf;
