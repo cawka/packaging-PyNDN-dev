@@ -54,7 +54,7 @@ PyObject *g_PyExc_NDNSignedInfoError;
 PyObject *g_PyExc_NDNInterestError;
 PyObject *g_PyExc_NDNExclusionFilterError;
 PyObject *g_PyExc_NDNKeyError;
-PyObject *g_PyExc_NDNContentObjectError;
+PyObject *g_PyExc_NDNDataError;
 
 static PyMethodDef g_module_methods[] = {
 	{"create", _pyndn_cmd_create, METH_NOARGS, NULL},
@@ -84,7 +84,7 @@ static PyMethodDef g_module_methods[] = {
 	{"DER_write_key", (PyCFunction) _pyndn_cmd_DER_write_key,
 		METH_VARARGS | METH_KEYWORDS, NULL},
 
-	// ** Methods of ContentObject
+	// ** Methods of Data
 	//
 	{"content_to_bytearray", _pyndn_cmd_content_to_bytearray, METH_O, NULL},
 	{"content_to_bytes", _pyndn_cmd_content_to_bytes, METH_O, NULL},
@@ -113,11 +113,11 @@ static PyMethodDef g_module_methods[] = {
 	{"name_comps_from_ndn", _pyndn_cmd_name_comps_from_ndn, METH_O, NULL},
 	{"Interest_obj_to_ndn", _pyndn_cmd_Interest_obj_to_ndn, METH_O, NULL},
 	{"Interest_obj_from_ndn", _pyndn_cmd_Interest_obj_from_ndn, METH_O, NULL},
-	{"encode_ContentObject", _pyndn_cmd_encode_ContentObject, METH_VARARGS,
+	{"encode_Data", _pyndn_cmd_encode_Data, METH_VARARGS,
 		NULL},
-	{"ContentObject_obj_from_ndn", _pyndn_cmd_ContentObject_obj_from_ndn,
+	{"Data_obj_from_ndn", _pyndn_cmd_Data_obj_from_ndn,
 		METH_O, NULL},
-        {"ContentObject_obj_from_ndn_buffer", _pyndn_cmd_ContentObject_obj_from_ndn_buffer, METH_O, NULL},
+        {"Data_obj_from_ndn_buffer", _pyndn_cmd_Data_obj_from_ndn_buffer, METH_O, NULL},
 	{"digest_contentobject", _pyndn_cmd_digest_contentobject, METH_VARARGS,
 		NULL},
 	{"content_matches_interest", _pyndn_cmd_content_matches_interest,
@@ -197,7 +197,7 @@ initialize_exceptions(void)
 	NEW_EXCEPTION(NDNExclusionFilterError, "NDN ExclusionFilter Exception",
 			g_PyExc_NDNInterestError);
 	NEW_EXCEPTION(NDNKeyError, "NDN Key Exception", g_PyExc_NDNKeyError);
-	NEW_EXCEPTION(NDNContentObjectError, "NDN ContentObject Error",
+	NEW_EXCEPTION(NDNDataError, "NDN Data Error",
 			g_PyExc_NDNError);
 
 	return 0;
@@ -216,15 +216,15 @@ _pyndn_get_type(enum e_class_type type)
 	} modules[] = {
 		{NDN, "ndn.NDN", "NDN"},
 		{Closure, "ndn.Closure", "Closure"},
-		{ContentObject, "ndn.ContentObject", "ContentObject"},
+		{Data, "ndn.Data", "Data"},
 		{ExclusionFilter, "ndn.Interest", "ExclusionFilter"},
 		{Interest, "ndn.Interest", "Interest"},
 		{Key, "ndn.Key", "Key"},
 		{KeyLocator, "ndn.Key", "KeyLocator"},
 		{Name, "ndn.Name", "Name"},
-		{Signature, "ndn.ContentObject", "Signature"},
-		{SignedInfo, "ndn.ContentObject", "SignedInfo"},
-		{SigningParams, "ndn.ContentObject", "SigningParams"},
+		{Signature, "ndn.Signature", "Signature"},
+		{SignedInfo, "ndn.SignedInfo", "SignedInfo"},
+		// {SigningParams, "ndn.Data", "SigningParams"},
 		{UpcallInfo, "ndn.Closure", "UpcallInfo"},
 		{CLASS_TYPE_COUNT, NULL, NULL}
 	};

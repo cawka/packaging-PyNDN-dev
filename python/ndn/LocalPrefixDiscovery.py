@@ -19,7 +19,7 @@ import time
 from apscheduler.scheduler import Scheduler
 import logging
 
-_LOG = logging.getLogger ("pyndn.LocalPrefixDiscovery")
+_LOG = logging.getLogger ("ndn.LocalPrefixDiscovery")
 
 class LocalPrefixDiscovery:
 #private:

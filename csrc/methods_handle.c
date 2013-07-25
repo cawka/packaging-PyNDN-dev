@@ -62,11 +62,11 @@ UpcallInfo_obj_from_ndn(enum ndn_upcall_kind upcall_kind,
 				ui->pco->offset[NDN_PCO_E]);
 		JUMP_IF_NEG_MEM(r, error);
 
-		py_o = ContentObject_obj_from_ndn(py_data);
+		py_o = Data_obj_from_ndn(py_data);
 		Py_CLEAR(py_data);
 		JUMP_IF_NULL(py_o, error);
 
-		r = PyObject_SetAttrString(py_obj_UpcallInfo, "ContentObject", py_o);
+		r = PyObject_SetAttrString(py_obj_UpcallInfo, "Data", py_o);
 		Py_DECREF(py_o);
 		JUMP_IF_NEG(r, error);
 	}
@@ -603,7 +603,7 @@ _pyndn_cmd_get(PyObject *UNUSED(self), PyObject *args)
 	int r, timeout = 3000;
 	struct ndn *handle;
 	struct ndn_charbuf *name, *interest, *data;
-	struct ndn_parsed_ContentObject *pco;
+	struct ndn_parsed_Data *pco;
 	struct ndn_indexbuf *comps;
 
 	if (!PyArg_ParseTuple(args, "OO|Oi", &py_NDN, &py_Name, &py_Interest,
@@ -670,7 +670,7 @@ _pyndn_cmd_get(PyObject *UNUSED(self), PyObject *args)
 		else
 			py_co = (Py_INCREF(Py_None), Py_None); // timeout
 	} else
-		py_co = ContentObject_obj_from_ndn(py_data);
+		py_co = Data_obj_from_ndn(py_data);
 
 exit:
 	Py_XDECREF(py_data);
@@ -694,8 +694,8 @@ _pyndn_cmd_put(PyObject *UNUSED(self), PyObject *args)
 		PyErr_SetString(PyExc_TypeError, "Must pass a NDN as arg 1");
 		return NULL;
 	}
-	if (strcmp(py_content_object->ob_type->tp_name, "ContentObject")) {
-		PyErr_SetString(PyExc_TypeError, "Must pass a ContentObject as arg 2");
+	if (strcmp(py_content_object->ob_type->tp_name, "Data")) {
+		PyErr_SetString(PyExc_TypeError, "Must pass a Data as arg 2");
 		return NULL;
 	}
 

@@ -11,6 +11,7 @@ import _ndn
 
 import Closure
 import Interest
+from Name import Name
 
 import threading
 
@@ -77,12 +78,16 @@ class Face (object):
             self._release_lock("expressInterest")
 
     def expressInterest (self, name, onData, onTimeout = None, template = None):
+        if not isinstance (name, Name):
+            name = Name (name)
         self._expressInterest (name, 
                                Closure.TrivialExpressClosure (onData, onTimeout), 
                                template)
 
     def expressInterestForLatest (self, name, onData, onTimeout = None, timeoutms = 1.0):
-        self.expressInterest (name, 
+        if not isinstance (name, Name):
+            name = Name (name)
+        self.expressInterest (name,
                               Closure.VersionResolverClosure (self, onData, onTimeout), 
                               Interest.Interest (interestLifetime = timeoutms, 
                                                  childSelector = Interest.CHILD_SELECTOR_LEFT))
@@ -98,11 +103,17 @@ class Face (object):
             self._release_lock("setInterestFilter")
 
     def setInterestFilter (self, name, onInterest, flags = None):
+        if not isinstance (name, Name):
+            name = Name (name)
+
         self._setInterestFilter (name, 
                                  Closure.TrivialFilterClosure (name, onInterest), 
                                  flags)
 
     def clearInterestFilter(self, name):
+        if not isinstance (name, Name):
+            name = Name (name)
+
         self._acquire_lock("setInterestFilter")
         try:
                         return _pyndn.clear_interest_filter(self.ndn_data, name.ndn_data)
@@ -114,6 +125,8 @@ class Face (object):
 #		if not _pyndn.is_upcall_executing(self.ndn_data):
 #			raise Exception, "Get called outside of upcall"
 
+        if not isinstance (name, Name):
+            name = Name (name)
         self._acquire_lock("get")
         try:
 			return _pyndn.get(self, name, template, timeoutms)

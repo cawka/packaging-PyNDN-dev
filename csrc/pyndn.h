@@ -13,7 +13,7 @@
 enum e_class_type {
 	NDN,
 	Closure,
-	ContentObject,
+	Data,
 	ExclusionFilter,
 	Interest,
 	Key,
@@ -51,7 +51,7 @@ PyObject *_pyndn_get_type(enum e_class_type type);
 
 #  define g_type_NDN              _pyndn_get_type(NDN)
 #  define g_type_Closure          _pyndn_get_type(Closure)
-#  define g_type_ContentObject    _pyndn_get_type(ContentObject)
+#  define g_type_Data             _pyndn_get_type(Data)
 #  define g_type_ExclusionFilter  _pyndn_get_type(ExclusionFilter)
 #  define g_type_Interest         _pyndn_get_type(Interest)
 #  define g_type_Key              _pyndn_get_type(Key)
@@ -70,6 +70,6 @@ extern PyObject *g_PyExc_NDNSignedInfoError;
 extern PyObject *g_PyExc_NDNInterestError;
 extern PyObject *g_PyExc_NDNExclusionFilterError;
 extern PyObject *g_PyExc_NDNKeyError;
-extern PyObject *g_PyExc_NDNContentObjectError;
+extern PyObject *g_PyExc_NDNDataError;
 
 #endif /* _PYNDN_H_ */

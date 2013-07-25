@@ -25,7 +25,7 @@ static struct type_to_name {
 	const char *name;
 } g_types_to_names[] = {
 	{CLOSURE, "Closure_ndn_data"},
-	{CONTENT_OBJECT, "ContentObject_ndn_data"},
+	{CONTENT_OBJECT, "Data_ndn_data"},
 	{EXCLUSION_FILTER, "ExclusionFilter_ndn_data"},
 	{HANDLE, "NDN_ndn_data"},
 	{INTEREST, "Interest_ndn_data"},

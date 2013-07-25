@@ -49,7 +49,7 @@ name_comps_from_ndn(PyObject *py_cname)
 		int size;
 		unsigned char *component;
 
-		debug("name_comps_from_ndn component %d of %d \n", n, comp_index->n - 2);
+		debug("name_comps_from_ndn component %zd of %zd \n", n, comp_index->n - 2);
 
 		component = &(name->buf[comp_index->buf[n]]) + 1; // What is the first byte? (250?)
 		//debug("\t%s\n", component);
@@ -258,7 +258,7 @@ Name_obj_from_ndn(PyObject *py_cname)
 	py_name_comps = name_comps_from_ndn (py_cname);
 	JUMP_IF_NULL(py_name_comps, error);
 
-	r = PyObject_SetAttrString(py_Name, "components", py_name_comps);
+        r = PyObject_SetAttrString(py_Name, "components", py_name_comps);
 	JUMP_IF_NEG(r, error);
 
 	return py_Name;

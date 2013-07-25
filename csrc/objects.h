@@ -35,7 +35,7 @@ enum _pyndn_capsules {
 };
 
 struct content_object_data {
-	struct ndn_parsed_ContentObject *pco;
+	struct ndn_parsed_Data *pco;
 	struct ndn_indexbuf *comps;
 };
 
