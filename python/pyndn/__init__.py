@@ -19,6 +19,8 @@ try:
 	from pyndn import NameCrypto
 	from pyndn.LocalPrefixDiscovery import *
 
+	import nre
+
 except ImportError:
 	del _sys.modules[__name__]
 	raise
