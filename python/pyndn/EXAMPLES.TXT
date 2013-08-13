@@ -6,8 +6,8 @@ On the Mac, need to make sure you access the version of Python the libraries are
 
 some examples that should work - 
 
-import NDN,Name,Interest,ContentObject,Key
-c = NDN.NDN()
+import Face,Name,Interest,ContentObject,Key
+c = Face.Face()
 k = Key.Key()
 k.generateRSA(1024)
 n = Name.Name(["Foo","Foo"])
@@ -37,13 +37,13 @@ sig.signatureBits= bytearray('124091')
 fork = _pyndn._pyndn_Signature_from_ndn(_pyndn._pyndn_Signature_to_ndn(sig)) 
 
 
-import NDN
-c = NDN.NDN()
+import Face
+c = Face.Face()
 k = c.getDefaultKey()
 
 
-import NDN,Name,Interest
-c = NDN.NDN()
+import Face,Name,Interest
+c = Face.Face()
 n = Name.Name()
 i = Interest.Interest()
 n.components = ["foo", "bar"]
@@ -58,24 +58,24 @@ n.components=["fork","beer", "hat we weave and wonder what it would take to move
 k = _pyndn._pyndn_Name_from_ndn(n.ndn_data)
 print k.components
 
-import NDN,Name,Interest
-c = NDN.NDN()
+import Face,Name,Interest
+c = Face.Face()
 n = Name.Name()
 n.components = ["foo","foo"]
 i = Interest.Interest()
 c.get(n,i,5000)
 
-import NDN,Interest,Name,Closure
+import Face,Interest,Name,Closure
 cl = Closure.Closure()
-c = NDN.NDN()
+c = Face.Face()
 n = Name.Name()
 n.components = ["foo","foo"]
 i = Interest.Interest()
 c.expressInterest(n,cl,i)
 c.run(1000)
 
-import NDN,Name,Interest,ContentObject, Key
-c = NDN.NDN()
+import Face,Name,Interest,ContentObject, Key
+c = Face.Face()
 n = Name.Name(["foo","frou"])
 i = Interest.Interest()
 co = ContentObject.ContentObject()
