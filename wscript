@@ -43,14 +43,14 @@ def configure(conf):
 
 def build (bld):
     bld.shlib (features = "pyext",
-               target = "pyndn/_pyndn",
+               target = "ndn/_pyndn",
                source = bld.path.ant_glob (["csrc/**/*.c"]),
                use = "NDNX SSL",
-               install_path='${PYTHONARCHDIR}/pyndn'
+               install_path='${PYTHONARCHDIR}/ndn'
                )
 
     bld (features = "py",
-         source = bld.path.ant_glob (["python/pyndn/**/*.py"]),
+         source = bld.path.ant_glob (["python/ndn/**/*.py"]),
          install_from = "python"
          )
 

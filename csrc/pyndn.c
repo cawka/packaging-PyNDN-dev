@@ -162,7 +162,7 @@ static PyMethodDef g_module_methods[] = {
 #if PY_MAJOR_VERSION >= 3
 static struct PyModuleDef g_moduledef = {
 	PyModuleDef_HEAD_INIT,
-	"pyndn._pyndn",
+	"ndn._pyndn",
 	NULL,
 	sizeof(struct pyndn_state),
 	g_module_methods,
@@ -214,18 +214,18 @@ _pyndn_get_type(enum e_class_type type)
 		const char *module;
 		const char *class;
 	} modules[] = {
-		{NDN, "pyndn.NDN", "NDN"},
-		{Closure, "pyndn.Closure", "Closure"},
-		{ContentObject, "pyndn.ContentObject", "ContentObject"},
-		{ExclusionFilter, "pyndn.Interest", "ExclusionFilter"},
-		{Interest, "pyndn.Interest", "Interest"},
-		{Key, "pyndn.Key", "Key"},
-		{KeyLocator, "pyndn.Key", "KeyLocator"},
-		{Name, "pyndn.Name", "Name"},
-		{Signature, "pyndn.ContentObject", "Signature"},
-		{SignedInfo, "pyndn.ContentObject", "SignedInfo"},
-		{SigningParams, "pyndn.ContentObject", "SigningParams"},
-		{UpcallInfo, "pyndn.Closure", "UpcallInfo"},
+		{NDN, "ndn.NDN", "NDN"},
+		{Closure, "ndn.Closure", "Closure"},
+		{ContentObject, "ndn.ContentObject", "ContentObject"},
+		{ExclusionFilter, "ndn.Interest", "ExclusionFilter"},
+		{Interest, "ndn.Interest", "Interest"},
+		{Key, "ndn.Key", "Key"},
+		{KeyLocator, "ndn.Key", "KeyLocator"},
+		{Name, "ndn.Name", "Name"},
+		{Signature, "ndn.ContentObject", "Signature"},
+		{SignedInfo, "ndn.ContentObject", "SignedInfo"},
+		{SigningParams, "ndn.ContentObject", "SigningParams"},
+		{UpcallInfo, "ndn.Closure", "UpcallInfo"},
 		{CLASS_TYPE_COUNT, NULL, NULL}
 	};
 	struct modules *p;
@@ -267,7 +267,7 @@ MODINIT(_pyndn)
 #if PY_MAJOR_VERSION >= 3
 	_pyndn_module = PyModule_Create(&g_moduledef);
 #else
-	_pyndn_module = Py_InitModule("pyndn._pyndn", g_module_methods);
+	_pyndn_module = Py_InitModule("ndn._pyndn", g_module_methods);
 #endif
 	if (!_pyndn_module) {
 		fprintf(stderr, "Unable to initialize PyNDN module\n");

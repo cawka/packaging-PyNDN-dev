@@ -4,7 +4,7 @@
 # Written by: Derek Kulinski <takeda@takeda.tk>
 #
 
-import pyndn
+import ndn
 from pyndn.impl import ndnb
 
 def ndnb_enumerate(names):

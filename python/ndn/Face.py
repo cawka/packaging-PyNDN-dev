@@ -19,7 +19,7 @@ import threading
 
 # ndn_handle is opaque to c struct
 
-class NDN(object):
+class Face(object):
 	def __init__(self):
 		self._handle_lock = threading.Lock()
 		self.ndn_data = _pyndn.create()

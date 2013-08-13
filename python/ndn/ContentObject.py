@@ -9,7 +9,7 @@ from . import _pyndn
 import utils
 
 class ContentType(utils.Enum):
-	_prefix = "pyndn"
+	_prefix = "ndn"
 
 CONTENT_DATA = ContentType.new_flag('CONTENT_DATA', 0x0C04C0)
 CONTENT_ENCR = ContentType.new_flag('CONTENT_ENCR', 0x10D091)
@@ -30,7 +30,7 @@ class ContentObject(object):
 		self.signature = None
 		self.verified = False
 
-		# pyndn
+		# ndn
 		self.ndn = None # Reference to NDN object
 		self.ndn_data_dirty = True
 		self.ndn_data = None  # backing charbuf

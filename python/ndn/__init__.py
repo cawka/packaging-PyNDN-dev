@@ -5,19 +5,19 @@
 #             Jeff Burke <jburke@ucla.edu>
 #
 
-__all__ = ['NDN', 'Closure', 'ContentObject', 'Interest', 'Key', 'Name']
+__all__ = ['Face', 'Closure', 'ContentObject', 'Interest', 'Key', 'Name']
 
 import sys as _sys
 
 try:
-	from pyndn.NDN import *
-	from pyndn.Closure import *
-	from pyndn.ContentObject import *
-	from pyndn.Interest import *
-	from pyndn.Key import *
-	from pyndn.Name import *
-	from pyndn import NameCrypto
-	from pyndn.LocalPrefixDiscovery import *
+	from Face import *
+	from Closure import *
+	from ContentObject import *
+	from Interest import *
+	from Key import *
+	from Name import *
+	import NameCrypto
+	from LocalPrefixDiscovery import *
 
 	import nre
 

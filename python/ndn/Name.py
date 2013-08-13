@@ -5,7 +5,7 @@
 #             Jeff Burke <jburke@ucla.edu>
 #
 
-import pyndn
+import ndn
 from . import _pyndn
 
 from copy import copy

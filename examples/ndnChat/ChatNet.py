@@ -4,10 +4,10 @@
 # Written by: Derek Kulinski <takeda@takeda.tk>
 #
 
-#from pyndn import NDN, Name, Interest, Key, ContentObject, Closure
+#from pyndn import Face, Name, Interest, Key, ContentObject, Closure
 import logging
 import sys, threading, getpass, time
-import pyndn
+import ndn
 
 from NetUtil import VersionedPull, FlowController
 
@@ -29,8 +29,8 @@ class ChatNet(object):
 		self.gui_callback = callback
 		self.friendly_names = {}
 
-		self.handle = pyndn.NDN()
-		self.chat_uri = pyndn.Name(prefix)
+		self.handle = ndn.Face()
+		self.chat_uri = ndn.Name(prefix)
 		self.members_uri = self.chat_uri + "members"
 
 		self.net_pull = VersionedPull(self.chat_uri, None, handle=self.handle)
@@ -64,16 +64,16 @@ class ChatNet(object):
 
 		return nick
 
-class ChatServer(pyndn.Closure):
+class ChatServer(ndn.Closure):
 	def __init__(self, prefix, nick=getpass.getuser()):
-		self.handle = pyndn.NDN()
+		self.handle = ndn.Face()
 		self.flow = FlowController(prefix, self.handle)
 
 		#XXX: temporary, until we allow fetching key from key storage
 		self.key = self.handle.getDefaultKey()
-		self.keylocator = pyndn.KeyLocator(self.key)
+		self.keylocator = ndn.KeyLocator(self.key)
 
-		self.prefix = pyndn.Name(prefix)
+		self.prefix = ndn.Name(prefix)
 		self.members_uri = self.prefix + "members"
 
 		member_name = self.members_uri.appendKeyID(fix_digest(self.key.publicKeyID))
@@ -90,14 +90,14 @@ class ChatServer(pyndn.Closure):
 		co_name = name.appendSegment(0)
 
 		# SignedInfo
-		si = pyndn.SignedInfo()
-		si.type = pyndn.CONTENT_DATA
-		si.finalBlockID = pyndn.Name.num2seg(0)
+		si = ndn.SignedInfo()
+		si.type = ndn.CONTENT_DATA
+		si.finalBlockID = ndn.Name.num2seg(0)
 		si.publisherPublicKeyDigest = self.key.publicKeyID
 		si.keyLocator = self.keylocator
 
 		# ContentObject
-		co = pyndn.ContentObject()
+		co = ndn.ContentObject()
 		co.content = content
 		co.name = co_name
 		co.signedInfo = si
@@ -119,13 +119,13 @@ class ChatServer(pyndn.Closure):
 		if self.message.matchesInterest(interest):
 			log.debug("Publishing content")
 			self.handle.put(self.message)
-			return pyndn.RESULT_INTEREST_CONSUMED
+			return ndn.RESULT_INTEREST_CONSUMED
 
 		if self.member_message.matchesInterest(interest):
 			log.debug("Publishing member's name")
 			self.handle.put(self.member_message)
-			return pyndn.RESULT_INTEREST_CONSUMED
+			return ndn.RESULT_INTEREST_CONSUMED
 
 		log.error("Got unknown request: %s" % name)
 
-		return pyndn.RESULT_OK
+		return ndn.RESULT_OK

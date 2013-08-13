@@ -5,7 +5,7 @@
 #
 
 import math
-import pyndn
+import ndn
 
 class Wrapper(object):
 	def __init__(self, name, key):
