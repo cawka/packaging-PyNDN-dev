@@ -7,7 +7,7 @@
 #             Alexander Afanasyev <alexander.afanasyev@ucla.edu>
 #
 
-import _ndn
+import _pyndn
 
 class Signature(object):
     def __init__(self):
@@ -15,15 +15,15 @@ class Signature(object):
         self.signatureBits = None
 
     def __setattr__(self, name, value):
-        if name != "ccn_data":
-            object.__setattr__ (self, 'ccn_data', None)
+        if name != "ndn_data":
+            object.__setattr__ (self, 'ndn_data', None)
 
         object.__setattr__ (self, name, value)
 
     def __getattribute__(self, name):
-        if name == "ccn_data":
-            if not object.__getattribute__ (self, 'ccn_data'):
-                self.ccn_data = _ndn.Signature_obj_to_ccn(self)
+        if name == "ndn_data":
+            if not object.__getattribute__ (self, 'ndn_data'):
+                self.ndn_data = _pyndn.Signature_obj_to_ndn(self)
 
         return object.__getattribute__ (self, name)
 

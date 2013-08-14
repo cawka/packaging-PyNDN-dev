@@ -7,7 +7,7 @@
 #             Alexander Afanasyev <alexander.afanasyev@ucla.edu>
 #
 
-import _ndn
+import _pyndn
 
 import select
 import threading
@@ -75,7 +75,7 @@ class EventLoop(object):
                 self.eventLock.release ()
 
                 self.run_once()
-            except _ndn.CCNError:
+            except _pyndn.NDNError:
                 if self.running:
                     # Report only if this exception wasn't intentional due to disconnect()
                     raise
@@ -90,5 +90,5 @@ class EventLoop(object):
         self.running = False
         for fd, handle in zip(self.fds.keys(), self.fds.values()):
             # disconnect only when nothing is running, otherwise segfaul guaranteed
-            if not _ndn.is_run_executing (handle.ccn_data):
+            if not _pyndn.is_run_executing (handle.ndn_data):
                 handle.disconnect ()

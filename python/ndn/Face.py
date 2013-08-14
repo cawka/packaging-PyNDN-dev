@@ -7,7 +7,7 @@
 #             Alexander Afanasyev <alexander.afanasyev@ucla.edu>
 #
 
-import _ndn
+import _pyndn
 
 import Closure
 import Interest

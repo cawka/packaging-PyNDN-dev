@@ -7,14 +7,14 @@
 #             Alexander Afanasyev <alexander.afanasyev@ucla.edu>
 #
 
-import _ndn
+import _pyndn
 from Key import Key
 
 from copy import copy
 import time, struct, random
 
 class Name (object):
-    __slots__ = ['components', 'ccn_data']
+    __slots__ = ['components', 'ndn_data']
 
     def __init__ (self, 
                   value = None):
@@ -31,7 +31,7 @@ class Name (object):
 
         # Name as string (URI)
         elif type (value) is str:
-            self.components = _ndn.name_comps_from_ccn (_ndn.name_from_uri (value))
+            self.components = _pyndn.name_comps_from_ndn (_pyndn.name_from_uri (value))
 
         # Name from list
         elif type (value) is list:
@@ -46,32 +46,32 @@ class Name (object):
         """
         
         name = Name ()
-        name.components = _ndn.name_comps_from_ccn_buffer (bytes (wire))
+        name.components = _pyndn.name_comps_from_ndn_buffer (bytes (wire))
         return name
 
     def toWire (self):
         """
         Convert to wire representation
         """
-        return _ndn.dump_charbuf (self.ccn_data)
+        return _pyndn.dump_charbuf (self.ndn_data)
 
     def toUri (self):
         """
         Convert to URI representation
         """
-        return _ndn.name_to_uri (self.ccn_data)
+        return _pyndn.name_to_uri (self.ndn_data)
 
     def __setattr__ (self, name, value):
         if name == "components":
-            object.__setattr__ (self, 'ccn_data', None)
+            object.__setattr__ (self, 'ndn_data', None)
             object.__setattr__ (self, name, value)
         else:
             raise TypeError ("Only 'components' can be set explicitly updated")
 
     def __getattribute__(self, name):
-        if name == "ccn_data":
-            if not object.__getattribute__ (self, 'ccn_data'):
-                object.__setattr__ (self, 'ccn_data', _ndn.name_comps_to_ccn (self.components))
+        if name == "ndn_data":
+            if not object.__getattribute__ (self, 'ndn_data'):
+                object.__setattr__ (self, 'ndn_data', _pyndn.name_comps_to_ndn (self.components))
 
         return object.__getattribute__ (self, name)
 
@@ -119,10 +119,10 @@ class Name (object):
         return self._append(component)
 
     def __repr__(self):
-        return "ndn.Name('" + _ndn.name_to_uri (self.ccn_data) + "')"
+        return "ndn.Name('" + _pyndn.name_to_uri (self.ndn_data) + "')"
 
     def __str__(self):
-        return _ndn.name_to_uri (self.ccn_data)
+        return _pyndn.name_to_uri (self.ndn_data)
 
     def __len__(self):
         return len (self.components)

@@ -7,11 +7,11 @@
 #             Alexander Afanasyev <alexander.afanasyev@ucla.edu>
 #
 
-import _ndn
+import _pyndn
 from Name import Name
 
 class KeyLocator (object):
-    __slots__ = ["ccn_data", "keyName"]
+    __slots__ = ["ndn_data", "keyName"]
     
     def __init__ (self, keyName = None):
         if isinstance (keyName, Name):
@@ -19,22 +19,22 @@ class KeyLocator (object):
         else:
             self.keyName = Name (keyName)
 
-        self.ccn_data = None
+        self.ndn_data = None
 
     @staticmethod
     def getDefault ():
-        return KeyLocator (_ndn.get_default_key_name ())
+        return KeyLocator (_pyndn.get_default_key_name ())
 
     def __setattr__ (self, name, value):
-        if name != "ccn_data":
-            object.__setattr__ (self, 'ccn_data', None)
+        if name != "ndn_data":
+            object.__setattr__ (self, 'ndn_data', None)
 
         object.__setattr__(self, name, value)
 
     def __getattribute__ (self, name):
-        if name=="ccn_data":
-            if not object.__getattribute__ (self, 'ccn_data'):
-                self.ccn_data = _ndn.KeyLocator_to_ccn (name = self.keyName.ccn_data)
+        if name=="ndn_data":
+            if not object.__getattribute__ (self, 'ndn_data'):
+                self.ndn_data = _pyndn.KeyLocator_to_ndn (name = self.keyName.ndn_data)
                 
         return object.__getattribute__(self, name)
 

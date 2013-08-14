@@ -140,7 +140,7 @@ error:
 }
 
 struct ndn_parsed_Data *
-_ndn_content_object_get_pco(PyObject *py_content_object)
+_pyndn_content_object_get_pco(PyObject *py_content_object)
 {
 	struct content_object_data *context;
 	int r;
@@ -164,7 +164,7 @@ error:
 }
 
 void
-_ndn_content_object_set_pco(PyObject *py_content_object,
+_pyndn_content_object_set_pco(PyObject *py_content_object,
 		struct ndn_parsed_Data *pco)
 {
 	struct content_object_data *context;
@@ -431,7 +431,7 @@ _pyndn_cmd_content_to_bytes(PyObject *UNUSED(self), PyObject *arg)
 }
 
 PyObject *
-_ndn_cmd_encode_Data(PyObject *UNUSED(self), PyObject *args)
+_pyndn_cmd_encode_Data(PyObject *UNUSED(self), PyObject *args)
 {
 	PyObject *py_content_object, *py_name, *py_content, *py_signed_info,
 			*py_key;
@@ -522,13 +522,13 @@ error:
 }
 
 PyObject *
-_ndn_cmd_Data_obj_from_ndn(PyObject *UNUSED(self), PyObject *py_co)
+_pyndn_cmd_Data_obj_from_ndn(PyObject *UNUSED(self), PyObject *py_co)
 {
 	return Data_obj_from_ndn(py_co);
 }
 
 PyObject *
-_ndn_cmd_Data_obj_from_ndn_buffer(PyObject *UNUSED(self), PyObject *py_buffer)
+_pyndn_cmd_Data_obj_from_ndn_buffer(PyObject *UNUSED(self), PyObject *py_buffer)
 {
 	return Data_obj_from_ndn_buffer(py_buffer);
 }

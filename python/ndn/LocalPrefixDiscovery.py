@@ -9,7 +9,7 @@
 # Author: Alexander Afanasyev <alexander.afanasyev@ucla.edu>
 #
 
-from NDN import *
+from Face import *
 from Interest import *
 from Name import *
 import Closure
@@ -36,8 +36,8 @@ class LocalPrefixDiscovery:
         self._scheduler = Scheduler ()
         self._scheduler.start ()
         self._timeouts = 0
-        self._face = NDN ()
-        self._eventLoop = NDN.EventLoop (self._face)
+        self._face = Face ()
+        self._eventLoop = Face.EventLoop (self._face)
 
     def subscribe (self, tag, callback):
         self._subscribers[tag] = callback
@@ -56,7 +56,7 @@ class LocalPrefixDiscovery:
 #private:
     def _start (self):
         self._needStopDiscovery = False
-        self._eventLoopThread = threading.Thread (target = self._ndn_loop_ignoring_errors)
+        self._eventLoopThread = threading.Thread (target = self._pyndn_loop_ignoring_errors)
         self._eventLoopThread.start ()
 
         nextDiscovery = datetime.datetime.now () + datetime.timedelta (seconds = 1)
@@ -67,7 +67,7 @@ class LocalPrefixDiscovery:
         self._eventLoop.stop ()
         self._eventLoopThread.join ()        
 
-    def _ndn_loop_ignoring_errors (self):
+    def _pyndn_loop_ignoring_errors (self):
         while not self._needStopDiscovery:
             try:
                 self._eventLoop.run ()

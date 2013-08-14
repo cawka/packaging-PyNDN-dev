@@ -6,7 +6,7 @@
 #             Jeff Burke <jburke@ucla.edu>
 #
 
-import _ndn
+import _pyndn
 
 class Key (object):
     def __init__ (self):
@@ -31,7 +31,7 @@ class Key (object):
 
     @staticmethod
     def getDefault ():
-        return _ndn.get_default_key()
+        return _pyndn.get_default_key()
 
     def generateRSA(self, numbits):
         _pyndn.generate_RSA_key(self, numbits)

@@ -6,7 +6,7 @@
 #             Jeff Burke <jburke@ucla.edu>
 #
 
-import _ndn
+import _pyndn
 
 import utils
 from utils import Const
@@ -30,17 +30,17 @@ class Data (object):
     # this is the finalization step
     # must pass a key here, there is no "default key" because
     # an NDN Face is not required to create the content object
-    # thus there is no access to the ccn library keystore.
+    # thus there is no access to the ndn library keystore.
     #
     def sign(self, key):
-        self.ccn_data = _ndn.encode_Data (self, 
-                                                   self.name.ccn_data,
+        self.ndn_data = _pyndn.encode_Data (self, 
+                                                   self.name.ndn_data,
                                                    self.content, 
-                                                   self.signedInfo.ccn_data, key)
+                                                   self.signedInfo.ndn_data, key)
         
     @staticmethod
     def fromWire (wire):
-        return _ndn.Data_obj_from_ccn_buffer (wire)
+        return _pyndn.Data_obj_from_ndn_buffer (wire)
 
     def toWire (self):
         """
@@ -48,31 +48,31 @@ class Data (object):
 
         Note that packet MUST be signed (or has been created from wire) before this call can succeed
         """
-        return _ndn.dump_charbuf (self.ccn_data)
+        return _pyndn.dump_charbuf (self.ndn_data)
 
     def __setattr__(self, name, value):
-        if name != "ccn_data":
-            object.__setattr__ (self, 'ccn_data', None)
+        if name != "ndn_data":
+            object.__setattr__ (self, 'ndn_data', None)
 
         if name == 'content':
-            object.__setattr__(self, name, _ndn.content_to_bytes (value))
+            object.__setattr__(self, name, _pyndn.content_to_bytes (value))
         else:
             object.__setattr__(self, name, value)
 
         object.__setattr__ (self, name, value)
 
     def __getattribute__(self, name):
-        if name == "ccn_data":
-            if not object.__getattribute__ (self, 'ccn_data'):
-                object.__setattr__ (self, 'ccn_data', _ndn.Interest_obj_to_ccn (self))
+        if name == "ndn_data":
+            if not object.__getattribute__ (self, 'ndn_data'):
+                object.__setattr__ (self, 'ndn_data', _pyndn.Interest_obj_to_ndn (self))
         # elif name == "exclude":
         #     return Exclude.ConstExclude (object.__getattribute__ (self, name))
 
         return object.__getattribute__ (self, name)
 
     def __getattribute__(self, name):
-        if name == "ccn_data":
-            if not object.__getattribute__ (self, "ccn_data"):
+        if name == "ndn_data":
+            if not object.__getattribute__ (self, "ndn_data"):
                 raise DataException ("Wire requested before Data packet is signed (use 'sign' call with appropriate key)")
         elif name == "name" or name == "signedInfo":
             return Const (object.__getattribute__ (self, name))
@@ -80,16 +80,16 @@ class Data (object):
         return object.__getattribute__(self, name)
 
     def digest(self):
-        return _ndn.digest_contentobject(self.ccn_data)
+        return _pyndn.digest_contentobject(self.ndn_data)
 
     def verify_content(self, handle):
-        return _ndn.verify_content(handle.ccn_data, self.ccn_data)
+        return _pyndn.verify_content(handle.ndn_data, self.ndn_data)
 
     def verify_signature(self, key):
-        return _ndn.verify_signature(self.ccn_data, key.ccn_data_public)
+        return _pyndn.verify_signature(self.ndn_data, key.ndn_data_public)
 
     def matchesInterest(self, interest):
-        return _ndn.content_matches_interest(self.ccn_data, interest.ccn_data)
+        return _pyndn.content_matches_interest(self.ndn_data, interest.ndn_data)
     
     # Where do we support versioning and segmentation?
 

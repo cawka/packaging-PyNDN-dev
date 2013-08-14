@@ -7,7 +7,7 @@
 #             Alexander Afanasyev <alexander.afanasyev@ucla.edu>
 #
 
-import _ndn
+import _pyndn
 import utils
 
 class ContentType(utils.Enum):
@@ -30,7 +30,7 @@ class SignedInfo (object):
         if py_timestamp is not None:
             if timestamp:
                 raise ValueError("You can define only timestamp or py_timestamp")
-            self.timeStamp = utils.py2ccn_time (py_timestamp)
+            self.timeStamp = utils.py2ndn_time (py_timestamp)
         else:
             self.timeStamp = timestamp
 
@@ -40,22 +40,22 @@ class SignedInfo (object):
         self.keyLocator = key_locator
 
     def __setattr__(self, name, value):
-        if name != "ccn_data":
-            object.__setattr__ (self, 'ccn_data', None)
+        if name != "ndn_data":
+            object.__setattr__ (self, 'ndn_data', None)
 
         object.__setattr__ (self, name, value)
 
     def __getattribute__(self, name):
-        if name == "ccn_data":
-            if not object.__getattribute__ (self, 'ccn_data'):
-                key_locator = self.keyLocator.ccn_data if self.keyLocator else None
-                self.ccn_data = _ndn.SignedInfo_to_ccn (self.publisherPublicKeyDigest, self.type, self.timeStamp,
+        if name == "ndn_data":
+            if not object.__getattribute__ (self, 'ndn_data'):
+                key_locator = self.keyLocator.ndn_data if self.keyLocator else None
+                self.ndn_data = _pyndn.SignedInfo_to_ndn (self.publisherPublicKeyDigest, self.type, self.timeStamp,
                                                         self.freshnessSeconds or (-1), self.finalBlockID, key_locator)
         elif name == "py_timestamp":
             ts = self.timeStamp
             if ts is None:
                 return None
-            return utils.ccn2py_time (ts)
+            return utils.ndn2py_time (ts)
         
         return object.__getattribute__ (self, name)
 

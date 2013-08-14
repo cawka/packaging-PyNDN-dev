@@ -7,7 +7,7 @@
 #             Alexander Afanasyev <alexander.afanasyev@ucla.edu>
 #
 
-import _ndn
+import _pyndn
 
 import utils
 from utils import Const
@@ -37,22 +37,22 @@ class Interest(object):
     # @staticmethod
     # def fromWire (wire):
     #     interest = Interest ()
-    #     interest.components = _ndn.Interest_obj_from_buffer (wire))
+    #     interest.components = _pyndn.Interest_obj_from_buffer (wire))
     #     return interest
 
     def toWire (self):
-        return _ndn.dump_charbuf (self.ccn_data)
+        return _pyndn.dump_charbuf (self.ndn_data)
 
     def __setattr__(self, name, value):
-        if name != "ccn_data":
-            object.__setattr__ (self, 'ccn_data', None)
+        if name != "ndn_data":
+            object.__setattr__ (self, 'ndn_data', None)
 
         object.__setattr__ (self, name, value)
 
     def __getattribute__(self, name):
-        if name == "ccn_data":
-            if not object.__getattribute__ (self, 'ccn_data'):
-                object.__setattr__ (self, 'ccn_data', _ndn.Interest_obj_to_ccn (self))
+        if name == "ndn_data":
+            if not object.__getattribute__ (self, 'ndn_data'):
+                object.__setattr__ (self, 'ndn_data', _pyndn.Interest_obj_to_ndn (self))
         elif name == "name":
             return Const (object.__getattribute__ (self, name))
         # elif name == "exclude":
@@ -134,8 +134,8 @@ CHILD_SELECTOR_LEFT = 0
 CHILD_SELECTOR_RIGHT = 1
 
 #
-#    //  IMPORTANT:  Exclusion component list must be sorted following "Canonical CCNx ordering"
-#    //              http://www.ccnx.org/releases/latest/doc/technical/CanonicalOrder.html
+#    //  IMPORTANT:  Exclusion component list must be sorted following "Canonical NDNx ordering"
+#    //              http://www.ndnx.org/releases/latest/doc/technical/CanonicalOrder.html
 #    //              in which shortest components go first.
 #
 
@@ -145,37 +145,37 @@ CHILD_SELECTOR_RIGHT = 1
 #         self.components = []
 
 #         # py-ndn
-#         self.ccn_data_dirty = False
-#         self.ccn_data = None  # backing charbuf
+#         self.ndn_data_dirty = False
+#         self.ndn_data = None  # backing charbuf
 
 #     def reset(self):
 #         self.components = []
 
 #     def add_names(self, names):
-#         self.ccn_data_dirty = True
+#         self.ndn_data_dirty = True
 #         self.components.extend(sorted(names))
 
 #     def add_name(self, name):
 #         if not type(name) is Name.Name:
 #             raise TypeError("Name type required")
 
-#         self.ccn_data_dirty = True
+#         self.ndn_data_dirty = True
 #         self.components.append(name)
 
 #     def add_any(self):
 #         self.components.append(Name.Name(name_type = Name.NAME_ANY))
 
 #     def __setattr__(self, name, value):
-#         if name != "ccn_data_dirty":
-#             self.ccn_data_dirty = True
+#         if name != "ndn_data_dirty":
+#             self.ndn_data_dirty = True
 #         object.__setattr__(self, name, value)
 
 #     def __getattribute__(self, name):
-#         if name == "ccn_data":
-#             if object.__getattribute__(self, 'ccn_data_dirty'):
-#                 self.ccn_data = _ndn.ExclusionFilter_names_to_ccn(
+#         if name == "ndn_data":
+#             if object.__getattribute__(self, 'ndn_data_dirty'):
+#                 self.ndn_data = _pyndn.ExclusionFilter_names_to_ndn(
 #                     self.components)
-#                 self.ccn_data_dirty = False
+#                 self.ndn_data_dirty = False
 #         return object.__getattribute__(self, name)
 
 #     def __str__(self):
