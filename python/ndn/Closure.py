@@ -30,13 +30,13 @@ UPCALL_CONTENT_RAW        = 8 # verification has not been attempted
 
 class Closure(object):
     def __init__(self):
-		#I don't think storing NDN's closure is needed
+        #I don't think storing NDN's closure is needed
         #and it creates a reference loop, as of now both
         #of those variables are never set -- Derek
         #
         # Use instance variables to return data to callback
-		self.ndn_data = None  # this holds the ndn_closure
-		self.ndn_data_dirty = False
+        self.ndn_data = None  # this holds the ndn_closure
+        self.ndn_data_dirty = False
         pass
 
     #If you're getting strange errors in upcall()
@@ -49,13 +49,13 @@ class Closure(object):
 
 class UpcallInfo(object):
     def __init__(self):
-		self.ndn = None  # NDN object (not used)
+        self.ndn = None  # NDN object (not used)
         self.Interest = None  # Interest object
         self.matchedComps = None  # int
         self.Data = None  # Content object
 
     def __str__(self):
-		ret = "ndn = %s" % self.ndn
+        ret = "ndn = %s" % self.ndn
         ret += "\nInterest = %s" % self.Interest
         ret += "\nmatchedComps = %s" % self.matchedComps
         ret += "\nData: %s" % str(self.Data)

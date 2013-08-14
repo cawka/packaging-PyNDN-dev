@@ -22,58 +22,58 @@ class Face (object):
     
     def __init__(self):
         self._handle_lock = threading.Lock()
-		self.ndn_data = _pyndn.create()
+        self.ndn_data = _pyndn.create()
         self.connect ()
 
     def connect (self):
-		_pyndn.connect(self.ndn_data)
+        _pyndn.connect(self.ndn_data)
 
     def disconnect (self):
-		_pyndn.disconnect(self.ndn_data)
+        _pyndn.disconnect(self.ndn_data)
 
     def defer_verification (self, deferVerification = True):
                 _pyndn.defer_verification(self.ndn_data, 1 if deferVerification else 0)
 
     def _acquire_lock(self, tag):
-		if not _pyndn.is_run_executing(self.ndn_data):
-#			print("%s: acquiring lock" % tag)
+        if not _pyndn.is_run_executing(self.ndn_data):
+#            print("%s: acquiring lock" % tag)
             self._handle_lock.acquire()
-#			print("%s: lock acquired" % tag)
+#            print("%s: lock acquired" % tag)
 
     def _release_lock(self, tag):
-		if not _pyndn.is_run_executing(self.ndn_data):
-#			print("%s: releasing lock" % tag)
+        if not _pyndn.is_run_executing(self.ndn_data):
+#            print("%s: releasing lock" % tag)
             self._handle_lock.release()
-#			print("%s: lock released" % tag)
+#            print("%s: lock released" % tag)
 
     def fileno(self):
-		return _pyndn.get_connection_fd(self.ndn_data)
+        return _pyndn.get_connection_fd(self.ndn_data)
 
     def process_scheduled(self):
-		assert not _pyndn.is_run_executing(self.ndn_data), "Command should be called when ndn_run is not running"
-		return _pyndn.process_scheduled_operations(self.ndn_data)
+        assert not _pyndn.is_run_executing(self.ndn_data), "Command should be called when ndn_run is not running"
+        return _pyndn.process_scheduled_operations(self.ndn_data)
 
     def output_is_pending(self):
-		assert not _pyndn.is_run_executing(self.ndn_data), "Command should be called when ndn_run is not running"
-		return _pyndn.output_is_pending(self.ndn_data)
+        assert not _pyndn.is_run_executing(self.ndn_data), "Command should be called when ndn_run is not running"
+        return _pyndn.output_is_pending(self.ndn_data)
 
     def run(self, timeoutms):
-		assert not _pyndn.is_run_executing(self.ndn_data), "Command should be called when ndn_run is not running"
+        assert not _pyndn.is_run_executing(self.ndn_data), "Command should be called when ndn_run is not running"
         self._handle_lock.acquire()
         try:
-			_pyndn.run(self.ndn_data, timeoutms)
+            _pyndn.run(self.ndn_data, timeoutms)
         finally:
             self._handle_lock.release()
 
     def setRunTimeout(self, timeoutms):
-		_pyndn.set_run_timeout(self.ndn_data, timeoutms)
+        _pyndn.set_run_timeout(self.ndn_data, timeoutms)
 
     # Application-focused methods
     #
     def _expressInterest(self, name, closure, template = None):
         self._acquire_lock("expressInterest")
         try:
-			return _pyndn.express_interest(self, name, closure, template)
+            return _pyndn.express_interest(self, name, closure, template)
         finally:
             self._release_lock("expressInterest")
 
@@ -96,9 +96,9 @@ class Face (object):
         self._acquire_lock("setInterestFilter")
         try:
             if flags is None:
-				return _pyndn.set_interest_filter(self.ndn_data, name.ndn_data, closure)
+                return _pyndn.set_interest_filter(self.ndn_data, name.ndn_data, closure)
             else:
-				return _pyndn.set_interest_filter(self.ndn_data, name.ndn_data, closure, flags)
+                return _pyndn.set_interest_filter(self.ndn_data, name.ndn_data, closure, flags)
         finally:
             self._release_lock("setInterestFilter")
 
@@ -122,21 +122,21 @@ class Face (object):
 
     # Blocking!
     def get (self, name, template = None, timeoutms = 3000):
-#		if not _pyndn.is_upcall_executing(self.ndn_data):
-#			raise Exception, "Get called outside of upcall"
+#        if not _pyndn.is_upcall_executing(self.ndn_data):
+#            raise Exception, "Get called outside of upcall"
 
         if not isinstance (name, Name):
             name = Name (name)
         self._acquire_lock("get")
         try:
-			return _pyndn.get(self, name, template, timeoutms)
+            return _pyndn.get(self, name, template, timeoutms)
         finally:
             self._release_lock("get")
 
     def put(self, contentObject):
         self._acquire_lock("put")
         try:
-			return _pyndn.put(self, contentObject)
+            return _pyndn.put(self, contentObject)
         finally:
             self._release_lock("put")
 
