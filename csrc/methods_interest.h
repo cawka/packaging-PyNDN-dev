@@ -15,10 +15,10 @@ void _pyndn_interest_set_pi(PyObject *py_interest,
 PyObject *_pyndn_cmd_Interest_obj_to_ndn(PyObject *UNUSED(self),
 		PyObject *py_interest);
 PyObject *_pyndn_cmd_Interest_obj_from_ndn(PyObject *UNUSED(self), PyObject *args);
-PyObject *_pyndn_cmd_ExclusionFilter_names_to_ndn(PyObject *UNUSED(self),
-		PyObject* args);
-PyObject *_pyndn_cmd_ExclusionFilter_obj_from_ndn(PyObject *UNUSED(self),
-		PyObject* args);
+// PyObject *_pyndn_cmd_ExclusionFilter_names_to_ndn(PyObject *UNUSED(self),
+// 		PyObject* args);
+// PyObject *_pyndn_cmd_ExclusionFilter_obj_from_ndn(PyObject *UNUSED(self),
+// 		PyObject* args);
 
 #endif	/* METHODS_INTERESTS_H */
 

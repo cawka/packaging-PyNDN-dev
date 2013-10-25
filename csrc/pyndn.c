@@ -138,10 +138,10 @@ static PyMethodDef g_module_methods[] = {
 		""},
 	{"_pyndn_SigningParams_from_ndn", _pyndn_SigningParams_from_ndn, METH_O, NULL},
 #endif
-	{"ExclusionFilter_names_to_ndn", _pyndn_cmd_ExclusionFilter_names_to_ndn,
-		METH_O, NULL},
-	{"ExclusionFilter_obj_from_ndn", _pyndn_cmd_ExclusionFilter_obj_from_ndn,
-		METH_O, NULL},
+	// {"ExclusionFilter_names_to_ndn", _pyndn_cmd_ExclusionFilter_names_to_ndn,
+	// 	METH_O, NULL},
+	// {"ExclusionFilter_obj_from_ndn", _pyndn_cmd_ExclusionFilter_obj_from_ndn,
+	// 	METH_O, NULL},
 	{"dump_charbuf", _pyndn_cmd_dump_charbuf, METH_O, NULL},
 	{"new_charbuf", _pyndn_cmd_new_charbuf, METH_VARARGS, NULL},
 
@@ -217,7 +217,7 @@ _pyndn_get_type(enum e_class_type type)
 		{NDN, "ndn.NDN", "NDN"},
 		{Closure, "ndn.Closure", "Closure"},
 		{Data, "ndn.Data", "Data"},
-		{ExclusionFilter, "ndn.Interest", "ExclusionFilter"},
+		/* {ExclusionFilter, "ndn.Interest", "ExclusionFilter"}, */
 		{Interest, "ndn.Interest", "Interest"},
 		{Key, "ndn.Key", "Key"},
 		{KeyLocator, "ndn.Key", "KeyLocator"},

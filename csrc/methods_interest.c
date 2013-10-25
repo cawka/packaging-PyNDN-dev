@@ -186,111 +186,111 @@ error:
 	return NULL;
 }
 
-static PyObject *
-ExclusionFilter_obj_from_ndn(PyObject *py_exclusion_filter)
-{
-	PyObject *py_obj_ExclusionFilter, *py_components = NULL;
-	PyObject *py_o;
-	struct ndn_charbuf *exclusion_filter;
-	int r;
-	struct ndn_buf_decoder decoder, *d;
-	size_t start, stop;
+// static PyObject *
+// ExclusionFilter_obj_from_ndn(PyObject *py_exclusion_filter)
+// {
+// 	PyObject *py_obj_ExclusionFilter, *py_components = NULL;
+// 	PyObject *py_o;
+// 	struct ndn_charbuf *exclusion_filter;
+// 	int r;
+// 	struct ndn_buf_decoder decoder, *d;
+// 	size_t start, stop;
 
-	assert(g_type_ExclusionFilter);
+// 	assert(g_type_ExclusionFilter);
 
-	debug("ExclusionFilter_from_ndn start\n");
+// 	debug("ExclusionFilter_from_ndn start\n");
 
-	exclusion_filter = NDNObject_Get(EXCLUSION_FILTER, py_exclusion_filter);
+// 	exclusion_filter = NDNObject_Get(EXCLUSION_FILTER, py_exclusion_filter);
 
-	// 1) Create python object
-	py_obj_ExclusionFilter = PyObject_CallObject(g_type_ExclusionFilter, NULL);
-	JUMP_IF_NULL(py_obj_ExclusionFilter, error);
+// 	// 1) Create python object
+// 	py_obj_ExclusionFilter = PyObject_CallObject(g_type_ExclusionFilter, NULL);
+// 	JUMP_IF_NULL(py_obj_ExclusionFilter, error);
 
-	// 2) Set ndn_data to a cobject pointing to the c struct
-	//    and ensure proper destructor is set up for the c object.
-	r = PyObject_SetAttrString(py_obj_ExclusionFilter, "ndn_data",
-			py_exclusion_filter);
-	JUMP_IF_NEG(r, error);
+// 	// 2) Set ndn_data to a cobject pointing to the c struct
+// 	//    and ensure proper destructor is set up for the c object.
+// 	r = PyObject_SetAttrString(py_obj_ExclusionFilter, "ndn_data",
+// 			py_exclusion_filter);
+// 	JUMP_IF_NEG(r, error);
 
-	// 3) Parse c structure and fill python attributes
-	//    using PyObject_SetAttrString
-	//
-	//    self.components = None
-	//    # pyndn
-	//    self.ndn_data_dirty = False
-	//    self.ndn_data = None  # backing charbuf
+// 	// 3) Parse c structure and fill python attributes
+// 	//    using PyObject_SetAttrString
+// 	//
+// 	//    self.components = None
+// 	//    # pyndn
+// 	//    self.ndn_data_dirty = False
+// 	//    self.ndn_data = None  # backing charbuf
 
-	py_components = PyList_New(0);
-	JUMP_IF_NULL(py_components, error);
+// 	py_components = PyList_New(0);
+// 	JUMP_IF_NULL(py_components, error);
 
-	r = PyObject_SetAttrString(py_obj_ExclusionFilter, "components",
-			py_components);
-	JUMP_IF_NEG(r, error);
+// 	r = PyObject_SetAttrString(py_obj_ExclusionFilter, "components",
+// 			py_components);
+// 	JUMP_IF_NEG(r, error);
 
-	/* begin the actual parsing */
-	d = ndn_buf_decoder_start(&decoder, exclusion_filter->buf,
-			exclusion_filter->length);
+// 	/* begin the actual parsing */
+// 	d = ndn_buf_decoder_start(&decoder, exclusion_filter->buf,
+// 			exclusion_filter->length);
 
-	r = ndn_buf_match_dtag(d, NDN_DTAG_Exclude);
-	JUMP_IF_NEG(r, parse_error);
-	ndn_buf_advance(d);
+// 	r = ndn_buf_match_dtag(d, NDN_DTAG_Exclude);
+// 	JUMP_IF_NEG(r, parse_error);
+// 	ndn_buf_advance(d);
 
-	r = ndn_buf_match_dtag(d, NDN_DTAG_Any);
-	JUMP_IF_NEG(r, error);
-	if (r) {
-		ndn_buf_advance(d);
-		ndn_buf_check_close(d);
-		debug("got any: %d\n", r);
+// 	r = ndn_buf_match_dtag(d, NDN_DTAG_Any);
+// 	JUMP_IF_NEG(r, error);
+// 	if (r) {
+// 		ndn_buf_advance(d);
+// 		ndn_buf_check_close(d);
+// 		debug("got any: %d\n", r);
 
-		py_o = Exclusion_Any_Obj();
-		JUMP_IF_NULL(py_o, error);
+// 		py_o = Exclusion_Any_Obj();
+// 		JUMP_IF_NULL(py_o, error);
 
-		r = PyList_Append(py_components, py_o);
-		Py_DECREF(py_o);
-		JUMP_IF_NEG(r, error);
-	}
+// 		r = PyList_Append(py_components, py_o);
+// 		Py_DECREF(py_o);
+// 		JUMP_IF_NEG(r, error);
+// 	}
 
-	while (ndn_buf_match_dtag(d, NDN_DTAG_Component)) {
-		start = d->decoder.token_index;
-		r = ndn_parse_required_tagged_BLOB(d, NDN_DTAG_Component, 0, -1);
-		JUMP_IF_NEG(r, error);
-		stop = d->decoder.token_index;
-		debug("got name\n");
+// 	while (ndn_buf_match_dtag(d, NDN_DTAG_Component)) {
+// 		start = d->decoder.token_index;
+// 		r = ndn_parse_required_tagged_BLOB(d, NDN_DTAG_Component, 0, -1);
+// 		JUMP_IF_NEG(r, error);
+// 		stop = d->decoder.token_index;
+// 		debug("got name\n");
 
-		py_o = Exclusion_Name_Obj(exclusion_filter->buf, start, stop);
-		r = PyList_Append(py_components, py_o);
-		Py_DECREF(py_o);
-		JUMP_IF_NEG(r, error);
+// 		py_o = Exclusion_Name_Obj(exclusion_filter->buf, start, stop);
+// 		r = PyList_Append(py_components, py_o);
+// 		Py_DECREF(py_o);
+// 		JUMP_IF_NEG(r, error);
 
-		r = ndn_buf_match_dtag(d, NDN_DTAG_Any);
-		if (r) {
-			ndn_buf_advance(d);
-			ndn_buf_check_close(d);
-			debug("got *any*: %d\n", r);
+// 		r = ndn_buf_match_dtag(d, NDN_DTAG_Any);
+// 		if (r) {
+// 			ndn_buf_advance(d);
+// 			ndn_buf_check_close(d);
+// 			debug("got *any*: %d\n", r);
 
-			py_o = Exclusion_Any_Obj();
-			JUMP_IF_NULL(py_o, error);
+// 			py_o = Exclusion_Any_Obj();
+// 			JUMP_IF_NULL(py_o, error);
 
-			r = PyList_Append(py_components, py_o);
-			Py_DECREF(py_o);
-			JUMP_IF_NEG(r, error);
-		}
-	}
-	ndn_buf_check_close(d);
-	JUMP_IF_NEG(d->decoder.state, parse_error);
+// 			r = PyList_Append(py_components, py_o);
+// 			Py_DECREF(py_o);
+// 			JUMP_IF_NEG(r, error);
+// 		}
+// 	}
+// 	ndn_buf_check_close(d);
+// 	JUMP_IF_NEG(d->decoder.state, parse_error);
 
-	// 4) Return the created object
-	debug("ExclusionFilter_from_ndn ends\n");
+// 	// 4) Return the created object
+// 	debug("ExclusionFilter_from_ndn ends\n");
 
-	return py_obj_ExclusionFilter;
+// 	return py_obj_ExclusionFilter;
 
-parse_error:
-	PyErr_SetString(g_PyExc_NDNExclusionFilterError, "error parsing the data");
-error:
-	Py_XDECREF(py_components);
-	Py_XDECREF(py_obj_ExclusionFilter);
-	return NULL;
-}
+// parse_error:
+// 	PyErr_SetString(g_PyExc_NDNExclusionFilterError, "error parsing the data");
+// error:
+// 	Py_XDECREF(py_components);
+// 	Py_XDECREF(py_obj_ExclusionFilter);
+// 	return NULL;
+// }
 
 // ************
 // Interest
@@ -404,25 +404,25 @@ Interest_obj_to_ndn(PyObject *py_obj_Interest)
 
 	r = is_attr_set(py_obj_Interest, "exclude", &py_o);
 	JUMP_IF_NEG(r, error);
-	if (r) {
-		PyObject *py_exclusions;
-		struct ndn_charbuf *exclusion_filter;
+	// if (r) {
+	// 	PyObject *py_exclusions;
+	// 	struct ndn_charbuf *exclusion_filter;
 
-		if (!PyObject_IsInstance(py_o, g_type_ExclusionFilter)) {
-			Py_DECREF(py_o);
-			PyErr_SetString(PyExc_TypeError, "Expected ExclusionFilter");
-			goto error;
-		}
+	// 	if (!PyObject_IsInstance(py_o, g_type_ExclusionFilter)) {
+	// 		Py_DECREF(py_o);
+	// 		PyErr_SetString(PyExc_TypeError, "Expected ExclusionFilter");
+	// 		goto error;
+	// 	}
 
-		r = is_attr_set(py_o, "ndn_data", &py_exclusions);
-		Py_DECREF(py_o);
-		JUMP_IF_NEG(r, error);
+	// 	r = is_attr_set(py_o, "ndn_data", &py_exclusions);
+	// 	Py_DECREF(py_o);
+	// 	JUMP_IF_NEG(r, error);
 
-		exclusion_filter = NDNObject_Get(EXCLUSION_FILTER, py_exclusions);
-		r = ndn_charbuf_append_charbuf(interest, exclusion_filter);
-		Py_DECREF(py_exclusions);
-		JUMP_IF_NEG(r, error);
-	}
+	// 	exclusion_filter = NDNObject_Get(EXCLUSION_FILTER, py_exclusions);
+	// 	r = ndn_charbuf_append_charbuf(interest, exclusion_filter);
+	// 	Py_DECREF(py_exclusions);
+	// 	JUMP_IF_NEG(r, error);
+	// }
 
 	r = process_int_attribute(interest, NDN_DTAG_ChildSelector,
 			py_obj_Interest, "childSelector");
@@ -631,13 +631,13 @@ Interest_obj_from_ndn(PyObject *py_interest)
 				len);
 		JUMP_IF_NEG_MEM(r, error);
 
-		py_o = ExclusionFilter_obj_from_ndn(py_exclusion_filter);
-		Py_DECREF(py_exclusion_filter);
-		JUMP_IF_NULL(py_o, error);
+		// py_o = ExclusionFilter_obj_from_ndn(py_exclusion_filter);
+		// Py_DECREF(py_exclusion_filter);
+		// JUMP_IF_NULL(py_o, error);
 
-		r = PyObject_SetAttrString(py_obj_Interest, "exclude", py_o);
-		Py_DECREF(py_o);
-		JUMP_IF_NEG(r, error);
+		// r = PyObject_SetAttrString(py_obj_Interest, "exclude", py_o);
+		// Py_DECREF(py_o);
+		// JUMP_IF_NEG(r, error);
 	}
 
 	//        self.childSelector = None
@@ -851,14 +851,14 @@ _pyndn_cmd_ExclusionFilter_names_to_ndn(PyObject *UNUSED(self), PyObject *py_nam
 	return ExclusionFilter_names_to_ndn(py_names);
 }
 
-PyObject *
-_pyndn_cmd_ExclusionFilter_obj_from_ndn(PyObject *UNUSED(self),
-		PyObject *py_exclusion_filter)
-{
-	if (!NDNObject_IsValid(EXCLUSION_FILTER, py_exclusion_filter)) {
-		PyErr_SetString(PyExc_TypeError, "Must pass a NDN Exclusion Filter");
-		return NULL;
-	}
+// PyObject *
+// _pyndn_cmd_ExclusionFilter_obj_from_ndn(PyObject *UNUSED(self),
+// 		PyObject *py_exclusion_filter)
+// {
+// 	if (!NDNObject_IsValid(EXCLUSION_FILTER, py_exclusion_filter)) {
+// 		PyErr_SetString(PyExc_TypeError, "Must pass a NDN Exclusion Filter");
+// 		return NULL;
+// 	}
 
-	return ExclusionFilter_obj_from_ndn(py_exclusion_filter);
-}
+// 	return ExclusionFilter_obj_from_ndn(py_exclusion_filter);
+// }
