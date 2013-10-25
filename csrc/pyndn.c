@@ -214,13 +214,13 @@ _pyndn_get_type(enum e_class_type type)
 		const char *module;
 		const char *class;
 	} modules[] = {
-		{NDN, "ndn.NDN", "NDN"},
+		{Face, "ndn.Face", "Face"},
 		{Closure, "ndn.Closure", "Closure"},
 		{Data, "ndn.Data", "Data"},
 		/* {ExclusionFilter, "ndn.Interest", "ExclusionFilter"}, */
 		{Interest, "ndn.Interest", "Interest"},
 		{Key, "ndn.Key", "Key"},
-		{KeyLocator, "ndn.Key", "KeyLocator"},
+		{KeyLocator, "ndn.KeyLocator", "KeyLocator"},
 		{Name, "ndn.Name", "Name"},
 		{Signature, "ndn.Signature", "Signature"},
 		{SignedInfo, "ndn.SignedInfo", "SignedInfo"},

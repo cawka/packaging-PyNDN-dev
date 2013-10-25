@@ -11,7 +11,7 @@
 #define NAMECRYPTO 1
 
 enum e_class_type {
-	NDN,
+	Face,
 	Closure,
 	Data,
 	/* ExclusionFilter, */
@@ -49,7 +49,7 @@ extern struct pyndn_state _pyndn_state;
 
 PyObject *_pyndn_get_type(enum e_class_type type);
 
-#  define g_type_NDN              _pyndn_get_type(NDN)
+#  define g_type_Face             _pyndn_get_type(Face)
 #  define g_type_Closure          _pyndn_get_type(Closure)
 #  define g_type_Data             _pyndn_get_type(Data)
 /* #  define g_type_ExclusionFilter  _pyndn_get_type(ExclusionFilter) */
