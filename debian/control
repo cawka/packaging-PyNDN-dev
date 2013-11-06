@@ -1,0 +1,20 @@
+Source: pyndn-exp
+Priority: extra
+Maintainer: Alexander Afanasyev <alexander.afanasyev@ucla.edu>
+Build-Depends: debhelper (>= 8.0.0), python-all (>= 2.7.0), 
+ python-all-dev (>= 2.7.0),
+ python-apscheduler (>= 2.1.1),
+ ndnx-dev (>= 0.2~rc1),
+ libssl-dev (>= 1.0.0)
+X-Python-Version: >= 2.7
+Standards-Version: 3.9.2
+Section: python
+Homepage: http://github.com/named-data/PyNDN
+Vcs-Git: git://github.com/named-data/PyNDN.git
+Vcs-Browser: http://github.com/named-data/PyNDN
+
+Package: python-ndn-exp
+Section: python
+Architecture: i386 amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}
+Description: Python bindings for NDN (experimental branch)

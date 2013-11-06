@@ -1,0 +1,5 @@
+pyndn-exp (0.2~rc1-ppa1~precise1) precise; urgency=low
+
+  * Initial release
+
+ -- Alexander Afanasyev <alexander.afanasyev@ucla.edu>  Tue, 06 Nov 2013 13:05:30 -0800
