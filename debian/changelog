@@ -1,3 +1,9 @@
+pyndn-exp (0.2-1ppa1~1saucy1) saucy; urgency=low
+
+  * Making release for saucy
+
+ -- Alexander Afanasyev <alexander.afanasyev@ucla.edu>  Thu, 14 Nov 2013 11:35:28 -0800
+
 pyndn-exp (0.2~rc1-ppa1~precise1) precise; urgency=low
 
   * Initial release
